@@ -293,9 +293,8 @@ namespace Projekt
                     loggedIn = true;
                 }
             }
-            int registerUserID = Convert.ToInt32(users[users.Count - 1].Id) + 1;
+            int registerUserID = users.Count;
             Customer newUser = new Customer(registerLogin, registerPasswd, registerUserID);
-            users.Add(newUser);
             return (loggedIn, newUser);
         }
         static (bool loggedIn, bool loggedAsAdmin, Customer loggedAs) LogIn(List<Customer> users, bool loggedIn, bool loggedAsAdmin)
@@ -411,11 +410,12 @@ namespace Projekt
                         var registerReturn = RegisterNewUser(customers, loggedIn);
                         loggedIn = registerReturn.Item1;
                         customerUser = registerReturn.Item2;
-                        string updatedCustomersData = JsonConvert.SerializeObject(customers, Formatting.Indented);
-                        File.WriteAllText(customersJSONPath, updatedCustomersData);
-                        customers = string.IsNullOrEmpty(customersJSONData) ?
-                            new List<Customer>() :
-                            JsonConvert.DeserializeObject<List<Customer>>(customersJSONData);
+                        customers.Add(customerUser);
+                        //string updatedCustomersData = JsonConvert.SerializeObject(customers, Formatting.Indented);
+                        //File.WriteAllText(customersJSONPath, updatedCustomersData);
+                        //customers = string.IsNullOrEmpty(customersJSONData) ?
+                        //    new List<Customer>() :
+                        //    JsonConvert.DeserializeObject<List<Customer>>(customersJSONData);
                         break;
                     default:
                         Console.WriteLine("INVALID INPUT");
