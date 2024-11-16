@@ -8,7 +8,7 @@ namespace Projekt
     {
         static void AddNewProduct(List<Product> products)
         {
-            //Allows the user to inser a new product at the end of the List of products.
+            //Allows the admin to insert a new product at the end of the List of products.
             bool validStrings = false;
             string manName = "", manCountry = "", modName = "";
             while (!validStrings)
@@ -66,6 +66,9 @@ namespace Projekt
         }
         static void EditProductDetails(List<Product> products, int idToEdit)
         {
+            //Takes the original list as a parameter, and then changes the value of desired 
+            //fields to the one choosed by administrator. We identify the correct item
+            //in the list by idToEdit
             bool validStrings = false;
             string manName = null, manCountry = null, modName = null;
             while (!validStrings)
@@ -114,6 +117,8 @@ namespace Projekt
         }
         static void EditProductManufaturer(List<Product> products, int idToEdit)
         {
+            //Less detailed version of EditProductDetails, this one allows the admin
+            //to change only manufacturer of choosed product
             bool validStrings = false;
             string manName = "", manCountry = "";
             while (!validStrings)
@@ -139,6 +144,7 @@ namespace Projekt
         }
         static void EditProductPrice(List<Product> products, int idToEdit)
         {
+            //Less detailed version of EditProductDetails, this one allows admin to change only the price of the product
             Console.WriteLine("Please fill the required data: ");
             bool validPrice = false;
             while (!validPrice)
@@ -165,8 +171,9 @@ namespace Projekt
         }
         static void EditExistingProduct(List<Product> products)
         {
+            //This function works as sort of interface to all the other Edit functions, its sort of like menu
+            //in which the admin just chooses which operation he likes to
             ListAllProducts(products);
-            //This works almost the same way AddNewProduct does with a small change after setting the price
             Console.WriteLine("To edit an exisitng product please select its Id:");
             int idToEdit = Convert.ToInt32(Console.ReadLine());
             idToEdit--;
@@ -207,6 +214,7 @@ namespace Projekt
         }
         static void RemoveExistingProduct(List<Product> products)
         {
+            //This function alows the admin to remove selected item from the products list
             ListAllProducts(products);
             Console.WriteLine("Please select Id of a product that you want to remove: ");
             int idToRemove = Convert.ToInt32(Console.ReadLine());
@@ -233,6 +241,7 @@ namespace Projekt
         }
         static void ListAllProducts(List<Product> products)
         {
+            //This function just prints all the products stored in the list
             Console.Clear();
             Console.WriteLine("List of all products\nId.\tmanufacturer name\tmanufacturer country\tmodel name\tprice");
             foreach (Product product in products)
@@ -244,11 +253,11 @@ namespace Projekt
         static void RefreshIds(List<Product> products)
         {
             /*This fucntion is crucial for removing products - after one of the products get deleted
-             * it goes through each one
-             * and assigns it a new ID because otherwise the user will see a product 
+             * it goes through each one in the list
+             * and assigns it a new ID, otherwise the user will see a product 
              * with a index of f.e. 2, then when their type in ID 2 to the remove function
-             * it wont be able to remove it, because even tho the ID is 2
-             * the real index of that product in the list is now 1
+             * it wont be able to remove it, because even tho the displayed ID is 2
+             * the real index in the list of that product is now set to 1
              * and since we are using .RemoveAt(), the indexes have to match
              */
             int newIdCounter = 1;
@@ -260,6 +269,9 @@ namespace Projekt
         }
         static (bool loggedIn, Customer user) RegisterNewUser(List<Customer> users, bool loggedIn)
         {
+            //Alows new customers to create a new account. It have to return a tuple with status of being logged in,
+            //and a new Customer item that we add to the customers list (for some reason this doesnt work otherwise,
+            //while when adding a new product we dont have to return the object itself).
             string registerLogin = "";
             string registerPasswd = "";
             bool validRegisterData = false;
@@ -299,7 +311,8 @@ namespace Projekt
         }
         static (bool loggedIn, bool loggedAsAdmin, Customer loggedAs) LogIn(List<Customer> users, bool loggedIn, bool loggedAsAdmin)
         {
-            //we need to return multiple variables thats why there is a tuple 
+            //In here we check whether the user wants to log as a administrator or customer.
+            //We need to return the loggedAs object so that the program can be adjust to whoever uses it.
             string login = "";
             string passwd = "";
             Customer whoIsLoggedIn = null;
@@ -335,7 +348,7 @@ namespace Projekt
                             validLogInData = true;
                             whoIsLoggedIn = user;
                             Console.Clear();
-                            Console.WriteLine("Successfully loged in as " + login);
+                            Console.WriteLine("Successfully logged in as " + login);
                             break;
                         }
                     }
@@ -349,6 +362,8 @@ namespace Projekt
         }
         static void OrderNewProduct(Customer customer, List<Product> products)
         {
+            //This function is available only to the customers and allows them to order a new product
+            //which means it will be added at the end of their orders list
             ListAllProducts(products);
             int idToOrder = 1;
             Console.WriteLine("Which product would you like to order? (type in its ID)");
@@ -383,6 +398,8 @@ namespace Projekt
 
             foreach (Customer customer in customers)
             {
+                //i dont think this is needed cause its a left over from the older version that used customers.json file
+                //but i will leave it in here just in case
                 customer.AssignOrdersToCustomer(orders);
             }
 
@@ -393,6 +410,7 @@ namespace Projekt
             
             while (!loggedIn) 
             { 
+                //login loop - this assures that the program doesnt continue until a user is logged in
                 string loginOrRegister = "";
                 Console.WriteLine("Do you want to log in or register? (type in 1 or 2)\n" +
                     "1. Login\n" +
@@ -425,6 +443,7 @@ namespace Projekt
 
             if (loggedAsAdmin) 
             { 
+                //Main program loop for the admin version
                 while (appRunning)
                 {
                     Console.WriteLine("MAIN ADMIN PANEL\n");
@@ -466,6 +485,7 @@ namespace Projekt
             } 
             else
             {
+                //Main program loop for the customer version
                 while (appRunning)
                 {
                     Console.WriteLine("Customer panel\n");

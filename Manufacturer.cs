@@ -8,6 +8,7 @@ namespace Projekt
 {
     abstract class Manufacturer
     {
+        //just a class
         public string ManufacturerName { get; set; }
         public string Country { get; set; }
 
